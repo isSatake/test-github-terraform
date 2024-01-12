@@ -28,7 +28,7 @@ jobs:
       - name: comment
         uses: actions/github-script@v7
         env:
-          PLAN: ${{ steps.plan.outputs.stdout }}
+          RESULT: ${{ steps.plan.outputs.stdout }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -45,9 +45,9 @@ jobs:
             // 2. Compose comment
             const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
-            <details><summary>Show Plan</summary>
+            <details><summary>Show Result</summary>
 
-            \`\`\`${ process.env.PLAN }\`\`\`
+            \`\`\`${ process.env.RESULT }\`\`\`
 
             </details>`;
 

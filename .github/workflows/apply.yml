@@ -1,4 +1,4 @@
-name: Plan
+name: Apply
 on:
   pull_request:
     types:
@@ -23,11 +23,11 @@ jobs:
         run: terraform init
       - name: apply
         id: apply
-        run: terraform apply -auto-approve
+        run: terraform apply -no-color -auto-approve
       - name: comment
         uses: actions/github-script@v7
         env:
-          PLAN: ${{ steps.apply.outputs.stdout }}
+          RESULT: ${{ steps.apply.outputs.stdout }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -44,9 +44,9 @@ jobs:
             // 2. Compose comment
             const output = `#### Terraform Apply 📖\`${{ steps.apply.outcome }}\`
 
-            <details><summary>Show Plan</summary>
+            <details><summary>Show Result</summary>
 
-            \`\`\`${ process.env.PLAN }\`\`\`
+            \`\`\`${ process.env.RESULT }\`\`\`
 
             </details>`;
 
