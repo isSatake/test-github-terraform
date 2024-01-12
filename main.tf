@@ -50,8 +50,8 @@ resource "github_team_members" "child-team-members" {
   }
 }
 
-resource "github_team" "grandchild-team" {
-  name           = "grandchild-team"
+resource "github_team" "child-team" {
+  name           = "child-team"
   privacy        = "closed"
-  parent_team_id = github_team.child-team.id
+  parent_team_id = github_team.root-team.id
 }
