@@ -23,11 +23,12 @@ jobs:
       - name: init
         run: terraform init
       - name: plan
+        id: plan
         run: terraform plan -no-color
       - name: comment
         uses: actions/github-script@v3
         env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          PLAN: ${{ steps.plan.outputs.stdout }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
