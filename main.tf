@@ -23,11 +23,6 @@ resource "github_membership" "satake" {
   username = "isSatake"
 }
 
-resource "github_membership" "ytanaka-" {
-  role     = "member"
-  username = "ytanaka-"
-}
-
 resource "github_team" "root-team" {
   name    = "root-team"
   privacy = "closed"
@@ -66,9 +61,5 @@ resource "github_team_members" "grandchild-team-members" {
   members {
     role     = "maintainer"
     username = "isSatake"
-  }
-  members {
-    role     = "member"
-    username = "ytanaka-"
   }
 }
