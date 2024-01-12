@@ -1,4 +1,9 @@
 terraform {
+  backend "s3" {
+    bucket = "satake-test-terraform-state"
+    key    = "test-github-terraform/terraform.tfstate"
+    region = "us-west-2"
+  }
   required_providers {
     github = {
       source  = "integrations/github"
@@ -10,34 +15,37 @@ terraform {
 # https://registry.terraform.io/providers/integrations/github/latest/docs#github-app-installation
 provider "github" {
   owner = "satake-test" # org name
-  app_auth {
-    id              = "793659"
-    installation_id = "45994882"
-    pem_file        = file("./satake-org-terraform.private-key.pem")
-  }
+  app_auth {}           # use env GITHUB_APP_ID, GITHUB_APP_INSTALLATION_ID, and GITHUB_APP_PEM_FILE
 }
 
 resource "github_membership" "satake" {
-  username = "isSatake"
   role     = "admin"
+  username = "isSatake"
 }
 
 resource "github_team" "root-team" {
   name    = "root-team"
-  privacy = "closed" # visible to all members of this organization.
+  privacy = "closed"
 }
 
 resource "github_team_members" "root-team-members" {
   team_id = github_team.root-team.id
-
   members {
+    role     = "maintainer"
     username = "isSatake"
-    role     = "member"
   }
 }
 
 resource "github_team" "child-team" {
   name           = "child-team"
-  parent_team_id = github_team.root-team.id
   privacy        = "closed"
+  parent_team_id = github_team.root-team.id
+}
+
+resource "github_team_members" "child-team-members" {
+  team_id = github_team.child-team.id
+  members {
+    role     = "maintainer"
+    username = "isSatake"
+  }
 }
