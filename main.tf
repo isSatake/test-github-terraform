@@ -1,9 +1,5 @@
 terraform {
-  backend "s3" {
-    bucket = "satake-test-terraform-state"
-    key    = "test-github-terraform/terraform.tfstate"
-    region = "us-west-2"
-  }
+  backend "s3" {}
   required_providers {
     github = {
       source  = "integrations/github"
@@ -12,10 +8,25 @@ terraform {
   }
 }
 
-# https://registry.terraform.io/providers/integrations/github/latest/docs#github-app-installation
+variable "github_app_id" {
+  type = string
+}
+
+variable "github_app_installation_id" {
+  type = string
+}
+
+variable "github_app_pem_file" {
+  type = string
+}
+
 provider "github" {
-  owner = "satake-test" # org name
-  app_auth {}           # use env GITHUB_APP_ID, GITHUB_APP_INSTALLATION_ID, and GITHUB_APP_PEM_FILE
+  owner = "satake-test"
+  app_auth {
+    id              = var.github_app_id
+    installation_id = var.github_app_installation_id
+    pem_file        = var.github_app_pem_file
+  }
 }
 
 resource "github_membership" "satake" {

@@ -33,6 +33,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            // コメント可能な最大長(65535)を超えそうな場合は切り詰める
+            const outputLength = 65000;
+            const result = process.env.RESULT;
+            let truncatedResult;
+            if (process.env.length > outputLength) {
+              truncatedResult = result.substring(result.length - outputLength);
+            }
+
             // 1. Retrieve existing bot comments for the PR
             const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
@@ -45,10 +53,10 @@ jobs:
 
             // 2. Compose comment
             const output = `#### Terraform Apply 📖\`${{ steps.apply.outcome }}\`
-
+            ${ truncatedResult ? '\nTerraform plan too long. Refer to its workflow run in Actions tab for the full-length plan.\n' : ''}
             <details><summary>Show Result</summary>
 
-            \`\`\`${ process.env.RESULT }\`\`\`
+            \`\`\`${ truncatedResult ?? result }\`\`\`
 
             </details>`;
 
