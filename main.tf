@@ -1,5 +1,9 @@
 terraform {
-  backend "s3" {}
+  backend "s3" {
+    bucket = "satake-test-terraform-state"
+    key    = "test-github-terraform/terraform.tfstate"
+    region = "us-west-2"
+  }
   required_providers {
     github = {
       source  = "integrations/github"

@@ -19,12 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v2
       - name: init
-        run: terraform init \
-          -backend-config="region=us-west-2" \
-          -backend-config="bucket=satake-test-terraform-state" \
-          -backend-config="key=test-github-terraform/terraform.tfstate" \
-          -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
-          -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+        run: terraform init -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
       - name: apply
         id: apply
         run: terraform apply -no-color -auto-approve
