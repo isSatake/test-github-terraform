@@ -48,7 +48,7 @@ jobs:
             });
 
             // 2. Compose comment
-            const output = `#### Terraform Apply 📖\`${{ steps.plan.outcome }}\`
+            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
             ${ truncatedResult ? '\nTerraform plan too long. Refer to its workflow run in Actions tab for the full-length plan.\n' : ''}
             <details><summary>Show Result</summary>
 
