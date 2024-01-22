@@ -34,7 +34,7 @@ jobs:
             const outputLength = 65000;
             const result = process.env.RESULT;
             let truncatedResult;
-            if (process.env.length > outputLength) {
+            if (result.length > outputLength) {
               truncatedResult = result.substring(result.length - outputLength);
             }
 
