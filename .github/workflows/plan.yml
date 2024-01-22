@@ -54,6 +54,8 @@ jobs:
 
             \`\`\`${ truncatedResult ?? result }\`\`\`
 
+            </details>`;
+
             // 3. Update or create comment
             if (botComment) {
                 await github.rest.issues.updateComment({
