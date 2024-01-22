@@ -12,10 +12,25 @@ terraform {
   }
 }
 
-# https://registry.terraform.io/providers/integrations/github/latest/docs#github-app-installation
+variable "github_app_id" {
+  type = string
+}
+
+variable "github_app_installation_id" {
+  type = string
+}
+
+variable "github_app_pem_file" {
+  type = string
+}
+
 provider "github" {
-  owner = "satake-test" # org name
-  app_auth {}           # use env GITHUB_APP_ID, GITHUB_APP_INSTALLATION_ID, and GITHUB_APP_PEM_FILE
+  owner = "satake-test"
+  app_auth {
+    id              = var.github_app_id
+    installation_id = var.github_app_installation_id
+    pem_file        = var.github_app_pem_file
+  }
 }
 
 resource "github_membership" "satake" {
