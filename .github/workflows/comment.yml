@@ -20,7 +20,7 @@ jobs:
           script: |
             const mode = "${{ inputs.mode }}";
             const outcome = "${{ inputs.outcome }}";
-            const result = "${{ inputs.result }}";
+            // const result = "${{ inputs.result }}";
             console.log("mode", mode);
             console.log("outcome", outcome);
             // console.log("result", result);
