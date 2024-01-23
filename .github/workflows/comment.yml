@@ -15,8 +15,15 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - name: echo
-        run: echo ${{ inputs.mode }} ${{ inputs.outcome }}} ${{ inputs.result }}
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const mode = "${{ inputs.mode }}";
+            const outcome = "${{ inputs.outcome }}";
+            const result = "${{ inputs.result }}";
+            console.log("mode", mode);
+            console.log("outcome", outcome);
+            console.log("result", result);
       - uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
