@@ -1,0 +1,64 @@
+on:
+  workflow_call:
+    inputs:
+      mode:
+        required: true
+        type: string # plan or apply
+      result:
+        required: true
+        type: string
+      outcome:
+        required: true
+        type: string
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // コメント可能な最大長(65535)を超えそうな場合は切り詰める
+            const outputLength = 65000;
+            const result = `
+            ${{ inputs.result }}
+            `;
+            let truncatedResult;
+            if (result.length > outputLength) {
+              truncatedResult = result.substring(result.length - outputLength);
+            }
+
+            // 既存コメント削除
+            const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+            });
+            const botComment = comments.find(comment => {
+                return comment.user.type === 'Bot' && comment.body.includes('Terraform ${{ inputs.mode }}')
+            });
+            if (botComment) {
+                await github.rest.issues.deleteComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: botComment.id,
+                });
+            }
+
+            // コメント生成
+            const output = `#### Terraform ${{ inputs.mode }} 📖\`${{ inputs.outcome }}\`
+            ${ truncatedResult ? '\nResult is too long. Refer to its workflow run in Actions tab for the full-length result.\n' : ''}
+            <details><summary>Show Result</summary>
+
+            \`\`\`${ truncatedResult ?? result }\`\`\`
+
+            </details>`;
+
+            // コメント作成
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
