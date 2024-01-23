@@ -23,7 +23,7 @@ jobs:
             const result = "${{ inputs.result }}";
             console.log("mode", mode);
             console.log("outcome", outcome);
-            console.log("result", result);
+            // console.log("result", result);
       - uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
