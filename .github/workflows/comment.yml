@@ -17,22 +17,13 @@ jobs:
     steps:
       - uses: actions/github-script@v7
         with:
-          script: |
-            const mode = "${{ inputs.mode }}";
-            const outcome = "${{ inputs.outcome }}";
-            const result = `
-              ${{ inputs.result }}
-            `;
-            console.log("mode", mode);
-            console.log("outcome", outcome);
-            console.log("result", result);
-      - uses: actions/github-script@v7
-        with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             // コメント可能な最大長(65535)を超えそうな場合は切り詰める
             const outputLength = 65000;
-            const result = "${{ inputs.result }}";
+            const result = `
+            ${{ inputs.result }}
+            `;
             let truncatedResult;
             if (result.length > outputLength) {
               truncatedResult = result.substring(result.length - outputLength);
